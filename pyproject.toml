@@ -1,0 +1,63 @@
+[project]
+name = "rural-producer-api"
+version = "0.1.0"
+description = "This project is for Extractta"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "alembic>=1.16.2",
+    "asyncpg>=0.30.0",
+    "fastapi>=0.115.13",
+    "httpx>=0.28.1",
+    "loguru>=0.7.3",
+    "passlib[bcrypt]>=1.7.4",
+    "psycopg-binary>=3.2.9",
+    "psycopg[binary,pool]>=3.2.9",
+    "pydantic>=2.11.7",
+    "pydantic-settings>=2.10.1",
+    "python-dotenv>=1.0.0",
+    "python-jose[cryptography]>=3.5.0",
+    "python-multipart>=0.0.20",
+    "sqlalchemy[asyncio]>=2.0.41",
+    "uvicorn>=0.34.3",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.1",
+    "pytest-asyncio>=1.0.0",
+    "pytest-cov>=6.2.1",
+    "ruff>=0.12.0",
+    "taskipy>=1.14.1",
+    "testcontainers>=4.10.0",
+]
+
+[tool.ruff]
+line-length = 95
+extend-exclude = ['alembic']
+
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT', 'FAST']
+
+[tool.ruff.format]
+preview = true
+quote-style = 'double'
+
+[tool.taskipy.tasks]
+lint = "ruff check"
+pre_format = "ruff check --fix"
+format = "ruff format"
+run = "uv run uvicorn app.main:app --reload"
+pre_test = "task lint"
+test = "pytest -s -x --cov=app -vv"
+post_test = "coverage html"
+
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = '-p no:warnings'
+asyncio_default_fixture_loop_scope = 'function'
+
+[tool.coverage.run]
+concurrency = ["thread", "greenlet"]
