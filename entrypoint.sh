@@ -19,8 +19,19 @@ ASYNC_DSN="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:$
 
 echo "DEBUG: DSN used to test database: $ASYNC_DSN"
 
-until uv run python -c "import asyncio, asyncpg; asyncio.run(asyncpg.connect(dsn='${ASYNC_DSN}'))"; do
-  echo "Database is not ready yet. Retrying in 2 seconds..."
+until uv run python -c "
+import asyncio, asyncpg, sys
+dsn = '${ASYNC_DSN}'
+async def try_connect():
+    try:
+        conn = await asyncpg.connect(dsn=dsn)
+        await conn.close()
+    except Exception:
+        sys.exit(1)
+asyncio.run(try_connect())
+"
+do
+  echo ">>> Database is not ready yet. Retrying in 2 seconds..."
   sleep 2
 done
 
