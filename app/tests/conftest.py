@@ -13,6 +13,12 @@ def anyio_backend():
     return "asyncio"
 
 
+@pytest.fixture(scope="session")
+def postgres_container():
+    with PostgresContainer("postgres:15") as postgres:
+        yield postgres
+
+
 @pytest.fixture
 async def engine():
     with PostgresContainer("postgres:15", driver="psycopg") as postgres:
