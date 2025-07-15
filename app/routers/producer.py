@@ -18,10 +18,10 @@ async def create_producer(
 ) -> ProducerResponse:
     """
     Cria um novo produtor no sistema.
-    - Dados obrigatórios do produtor (CPF/CNPJ, nome, áreas, etc.)
-    - CPF/CNPJ deve ser único seguindo os padrões de validação,
-    - também as areas hectares devem ser maiores que zero com virgula, e
-    - adicionando o alias (ha) após os números.
+    Dados obrigatórios do produtor (CPF/CNPJ, nome, áreas, etc.)
+    CPF/CNPJ deve ser único seguindo os padrões de validação.
+    Também as areas hectares devem ser maiores que zero com virgula.
+    E adicionando o alias (ha) após os números.
     """
 
     logger.info(f"Creating producer: {producer.name}")
@@ -66,7 +66,8 @@ async def update_producer(
 ) -> ProducerResponse:
     """
     Atualiza os dados do produtor pelo ID.
-    - producer_id: ID do produtor a ser atualizado
+    producer_id: ID do produtor a ser atualizado
+    Usar ponto em vez de virgula nos campos de hectares para valores decimais.
     """
     logger.info(f"Request to update producer ID: {producer_id}")
     return await crud.update_producer(db=db, producer_id=producer_id, updates=updates)

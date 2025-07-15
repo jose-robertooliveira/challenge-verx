@@ -43,3 +43,5 @@ docker compose down -v
 
 # Rodar os testes:
 uv run pytest -v
+# OBS: Ao rodar os testes pela primeira vez, se houver algum erro tente antes executar o comando:
+"uv sync" para sicronizar as dependencias e depois execute os testes novamente.
